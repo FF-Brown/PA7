@@ -11,10 +11,12 @@
 
 int main(void)
 {
-	Hand player_hand;
-	Hand dealer_hand;
+	Hand player_hand, dealer_hand, buffer1, buffer2;
 	init_hand(&player_hand);
 	init_hand(&dealer_hand);
+	init_hand(&buffer1);
+	init_hand(&buffer2);
+	int discard_list[5] = { 0 };
 
 	/* initialize suit array */
 	const char* suit[4] = { "Hearts", "Diamonds", "Clubs", "Spades" };
@@ -30,6 +32,12 @@ int main(void)
 
 	shuffle(deck);
 	deal(deck, denomination, suit, &player_hand);
+	deal(deck, denomination, suit, &dealer_hand);
+
+	printf("~~WELCOME TO POKER~~\n");
+	display_menu();
+	display_hand(player_hand, suit, denomination);
+	redraw(discard_list);
 
 	return 0;
 }
