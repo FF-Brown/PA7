@@ -36,7 +36,7 @@ void display_menu(void)
 			break;
 			//Leave switch and while loop to begin playing game
 		case 2: //PLAY
-			system("cls");
+			//system("cls");
 			printf("Good luck!\n\n");
 			break;
 			//Exit program
@@ -62,7 +62,9 @@ void rules(void)
 {
 	printf("Typical rules of five-card draw.\n");
 }
-/* shuffle cards in deck (starting code)*/
+/*
+shuffle cards in deck (starting code)
+*/
 void shuffle(int wDeck[][13])
 {
 	int row = 0;    /* row number */
@@ -83,28 +85,65 @@ void shuffle(int wDeck[][13])
 		wDeck[row][column] = card;
 	}
 }
-/* deal cards in deck (starting code)*/
-void deal(const int wDeck[][13], const char* wDenomination[], const char* wSuit[], Hand* hand)
+/*
+deal cards in deck (starting code)
+*/
+void deal(const int wDeck[][13], const char* wDenomination[], const char* wSuit[], Hand* player_hand, Hand* dealer_hand, Hand* buffer1, Hand* buffer2)
 {
 	int row = 0;    /* row number */
 	int column = 0; /*column number */
 	int card = 0;   /* card counter */
 
-	/* deal each of the 52 cards */
-	for (card = 1; card <= 5; card++)
-	{
+	/* deal 5 cards to player */
+	for (card = 1; card <= 5; card++) {
 		/* loop through rows of wDeck */
-		for (row = 0; row <= 3; row++)
-		{
+		for (row = 0; row <= 3; row++)	{
 			/* loop through columns of wDeck for current row */
-			for (column = 0; column <= 12; column++)
-			{
+			for (column = 0; column <= 12; column++) {
 				/* if slot contains current card, display card */
-				if (wDeck[row][column] == card)
-				{
+				if (wDeck[row][column] == card)	{
 					//printf("%5s of %-8s%c", wDenomination[column], wSuit[row], card % 2 == 0 ? '\n' : '\t');
-					hand->cards[card - 1].denomination = column;
-					hand->cards[card - 1].suit = row;
+					player_hand->cards[card - 1].denomination = column;
+					player_hand->cards[card - 1].suit = row;
+					//printf("%5s of %-8s%c", wDenomination[hand->cards[card - 1].denomination], wSuit[hand->cards[card - 1].suit], card % 2 == 0 ? '\n' : '\t');
+				}
+			}
+		}
+	}
+	//Deal next 5 cards to dealer
+	for (; card <= 10; card++) {
+		for (row = 0; row <= 3; row++) {
+			for (column = 0; column <= 12; column++) {
+				if (wDeck[row][column] == card)	{
+					//printf("%5s of %-8s%c", wDenomination[column], wSuit[row], card % 2 == 0 ? '\n' : '\t');
+					dealer_hand->cards[card - 6].denomination = column;
+					dealer_hand->cards[card - 6].suit = row;
+					//printf("%5s of %-8s%c", wDenomination[hand->cards[card - 1].denomination], wSuit[hand->cards[card - 1].suit], card % 2 == 0 ? '\n' : '\t');
+				}
+			}
+		}
+	}
+	//Deal next 5 cards to first buffer
+	for (; card <= 15; card++) {
+		for (row = 0; row <= 3; row++) {
+			for (column = 0; column <= 12; column++) {
+				if (wDeck[row][column] == card) {
+					//printf("%5s of %-8s%c", wDenomination[column], wSuit[row], card % 2 == 0 ? '\n' : '\t');
+					buffer1->cards[card - 11].denomination = column;
+					buffer1->cards[card - 11].suit = row;
+					//printf("%5s of %-8s%c", wDenomination[hand->cards[card - 1].denomination], wSuit[hand->cards[card - 1].suit], card % 2 == 0 ? '\n' : '\t');
+				}
+			}
+		}
+	}
+	//Deal next 5 cards to second buffer
+	for (; card <= 20; card++) {
+		for (row = 0; row <= 3; row++) {
+			for (column = 0; column <= 12; column++) {
+				if (wDeck[row][column] == card) {
+					//printf("%5s of %-8s%c", wDenomination[column], wSuit[row], card % 2 == 0 ? '\n' : '\t');
+					buffer2->cards[card - 16].denomination = column;
+					buffer2->cards[card - 16].suit = row;
 					//printf("%5s of %-8s%c", wDenomination[hand->cards[card - 1].denomination], wSuit[hand->cards[card - 1].suit], card % 2 == 0 ? '\n' : '\t');
 				}
 			}
@@ -135,12 +174,12 @@ void display_hand(Hand hand, const char* wSuit[], const char* wDenomination[])
 		printf("%d.) %s of %s\n", i + 1, wDenomination[hand.cards[i].denomination], wSuit[hand.cards[i].suit]);
 	}
 }
-void redraw(int discard_list[])
+void get_redraw(int discard_list[])
 {
 	int card_numbers[5] = { 0 };
 	int discard = 0;
 	do{
-		printf("How many cards would you like to discard? Next you will choose *which* cards to discard..\n");
+		printf("How many cards would you like to discard? Next you will choose *which* cards to discard.\n");
 		scanf("%d", &discard);
 		if (discard < 0 || discard > 5)
 			printf("Invalid input. Try again.\n");
@@ -150,29 +189,34 @@ void redraw(int discard_list[])
 	case 0:
 		break;
 	case 1:
-		printf("Indicate the cards you would like to discard by their order in your hand (i.e. 1, 3, 5)\n");
-		for (int i = 0; i < discard; i++)
-			scanf("%d", &card_numbers[i]);
+		printf("Indicate the cards you would like to discard by their order in your hand (i.e. 1, 3, 5, enter)\n");
+		//for (int i = 0; i < discard; i++)
+		//	scanf("%d", &card_numbers[i]);
+		scanf("%d", &card_numbers[0]);
 		break;
 	case 2:
-		printf("Indicate the cards you would like to discard by their order in your hand (i.e. 1, 3, 5)\n");
-		for (int i = 0; i < discard; i++)
-			scanf("%d", &card_numbers[i]);
+		printf("Indicate the cards you would like to discard by their order in your hand (i.e. 1, 3, 5, enter)\n");
+		//for (int i = 0; i < discard; i++)
+		//	scanf("%d", &card_numbers[i]);
+		scanf("%d%d", &card_numbers[0], &card_numbers[1]);
 		break;
 	case 3:
-		printf("Indicate the cards you would like to discard by their order in your hand (i.e. 1, 3, 5)\n");
-		for (int i = 0; i < discard; i++)
-			scanf("%d", &card_numbers[i]);
+		printf("Indicate the cards you would like to discard by their order in your hand (i.e. 1, 3, 5, enter)\n");
+		//for (int i = 0; i < discard; i++)
+		//	scanf("%d", &card_numbers[i]);
+		scanf("%d%d%d", &card_numbers[0], &card_numbers[1], &card_numbers[2]);
 		break;
 	case 4:
-		printf("Indicate the cards you would like to discard by their order in your hand (i.e. 1, 3, 5)\n");
-		for (int i = 0; i < discard; i++)
-			scanf("%d", &card_numbers[i]);
+		printf("Indicate the cards you would like to discard by their order in your hand (i.e. 1, 3, 5, enter)\n");
+		//for (int i = 0; i < discard; i++)
+		//	scanf("%d", &card_numbers[i]);
+		scanf("%d%d%d%d", &card_numbers[0], &card_numbers[1], &card_numbers[2], &card_numbers[3]);
 		break;
 	case 5:
-		printf("Indicate the cards you would like to discard by their order in your hand (i.e. 1, 3, 5)\n");
-		for (int i = 0; i < discard; i++)
-			scanf("%d", &card_numbers[i]);
+		printf("Indicate the cards you would like to discard by their order in your hand (i.e. 1, 3, 5, enter)\n");
+		//for (int i = 0; i < discard; i++)
+		//	scanf("%d", &card_numbers[i]);
+		scanf("%d%d%d%d%d", &card_numbers[0], &card_numbers[1], &card_numbers[2], &card_numbers[3], &card_numbers[4]);
 		break;
 	default:
 		break;
@@ -180,7 +224,131 @@ void redraw(int discard_list[])
 	for (int check = 1; check <= 5; check++) {
 		for (int i = 0; i < 5; i++) {
 			if (card_numbers[i] == check)
-				discard_list[i] = 1;
+				discard_list[check - 1] = 1;
 		}
 	}
+}
+void redraw(int discard_list[], Hand* hand, Hand buffer)
+{
+	for (int i = 0; i < 5; i++) {
+		if (discard_list[i] == 1) {
+			hand->cards[i].denomination = buffer.cards[i].denomination;
+			hand->cards[i].suit = buffer.cards[i].suit;
+		}
+	}
+}
+/*
+	Function: cont_playing()
+	Date Created:
+	Description: Gives player the option to play again. New and improved version with a do-while loop (as it should be)
+	Preconditions: Game over, all results displayed
+	Postconditions: Returns player decision
+*/
+char cont_playing(void)
+{
+	char cont = '\0';
+	do{
+		printf("Would you like to play again? (y/n)\n");
+		scanf(" %c", &cont);
+		if (cont != 'y' && cont != 'n')
+			printf("Invalid input.\n");
+	} while (cont != 'y' && cont != 'n');
+	return cont;
+}
+void init_deck(int deck[][13])
+{
+	for (int rows = 0; rows < 4; rows++) {
+		for (int columns = 0; columns < 13; columns++) {
+			deck[rows][columns] = 0;
+		}
+	}
+}
+void precheck_hand(Hand hand, int denominations[], int suits[])
+{
+	for (int i = 0; i < 5; i++)	{
+		denominations[hand.cards[i].denomination]++;
+		suits[hand.cards[i].suit];
+	}
+}
+//denomination
+int check_four(int denominations[])
+{
+	int result = 0;
+	for (int i = 0; i < 14; i++) {
+		if (denominations[i] == 4)
+			result = 1;
+	}
+	return result;
+}
+//same suit
+int check_flush(int suits[])
+{
+	int result = 0;
+	for (int i = 0; i < 5; i++) {
+		if (suits[i])
+			result = 1;
+	}
+	return result;
+}
+//consecutive
+int check_straight(int denominations[])
+{
+	short result = 0;
+	for (int i = 0; i < 11; i++) {
+		if (denominations[i] == 1) {
+			for (int j = 0; j < 4; j++) {
+				if (denominations[j] == 1)
+					++result;
+			}
+		}
+	}
+	if (result == 4) result = 1;
+	else result = 0;
+	return result;
+}
+int check_three(int denominations[])
+{
+	int result = 0;
+	for (int i = 0; i < 14; i++) {
+		if (denominations[i] == 3)
+			result = 1;
+	}
+	return result;
+}
+int check_twoPair(int denominations[])
+{
+	int result = 0;
+	for (int i = 0; i < 14; i++) {
+		if (denominations[i] >= 2)
+			result++;
+	}
+	if (result == 2) result = 1;
+	else result = 0;
+	return result;
+}
+int check_pair(int denominations[])
+{
+	int result = 0;
+	for (int i = 0; i < 14; i++) {
+		if (denominations[i] >= 2)
+			result = 1;
+	}
+	return result;
+}
+int check_master(int denominations[], int suits[])
+{
+	short score = 0;
+	if (check_four(denominations))
+		score = FOUR_OF_A_KIND;
+	else if (check_flush(suits))
+		score = FLUSH;
+	else if (check_straight(denominations))
+		score = STRAIGHT;
+	else if (check_three(denominations))
+		score = THREE_OF_A_KIND;
+	else if (check_twoPair(denominations))
+		score = TWO_PAIR;
+	else if (check_pair(denominations))
+		score = PAIR;
+	return score;
 }

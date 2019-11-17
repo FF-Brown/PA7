@@ -4,7 +4,15 @@
 	Description: A severely limited version of five-card draw poker. Includes no betting and a somewhat short list of winning hand combinations. Also, only allows for one player versus the dealer (computer). Despite these restrictions, has essentially the same gameplay as a typical round of five-card draw.
 */
 
+#ifndef POKER_H
+#define POKER_H
 #define _CRT_SECURE_NO_WARNINGS
+#define FOUR_OF_A_KIND 6
+#define FLUSH 5
+#define STRAIGHT 4
+#define THREE_OF_A_KIND 3
+#define TWO_PAIR 2
+#define PAIR 1
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -42,7 +50,7 @@ void display_menu(void);
 */
 void rules(void);
 void shuffle(int wDeck[][13]);
-void deal(const int wDeck[][13], const char* wdenomination[], const char* wSuit[], Hand* hand);
+void deal(const int wDeck[][13], const char* wDenomination[], const char* wSuit[], Hand* player_hand, Hand* dealer_hand, Hand* buffer1, Hand* buffer2);
 /*
 	Function: init_hand()
 	Date Created: 11/13/2019
@@ -52,4 +60,17 @@ void deal(const int wDeck[][13], const char* wdenomination[], const char* wSuit[
 */
 void init_hand(Hand* hand);
 void display_hand(Hand hand, const char* wSuit[], const char* wDenomination[]);
-void redraw(int discard_list[]);
+void get_redraw(int discard_list[]);
+void redraw(int discard_list[], Hand* hand, Hand buffer);
+char cont_playing(void);
+void init_deck(int deck[][13]);
+void precheck_hand(Hand hand, int denominations[], int suits[]);
+int check_four(int denominations[]);
+int check_flush(int suits[]);
+int check_straight(int denominations[]);
+int check_three(int denominations[]);
+int check_twoPair(int denominations[]);
+int check_pair(int denominations[]);
+int check_master(int denominations[], int suits[]);
+
+#endif // !POKER_H
