@@ -18,10 +18,12 @@ int main(void)
 	init_hand(&buffer2);
 	int discard_list[5] = { 0, 0, 0, 0, 0 };
 	char cont = '\0';
-	int player_denominations[14] = { 0 };
-	int player_suits[5] = { 0 };
-	int dealer_denominations[14] = { 0 };
-	int dealer_suits[5] = { 0 };
+	int denominations_player[13] = { 0 };
+	int denominations_dealer[13] = { 0 };
+	int suits_player[4] = { 0 };
+	int suits_dealer[4] = { 0 };
+	short score_player = 0, score_dealer = 0;
+	short i = 0, round = 1;
 
 	/* initialize suit array */
 	const char* suit[4] = { "Hearts", "Diamonds", "Clubs", "Spades" };
@@ -34,6 +36,12 @@ int main(void)
 	int deck[4][13] = { 0 };
 
 begin:
+	//Reset for consecutive rounds
+	for (i = 0; i < 5; i++) discard_list[i] = 0; 
+	for (i = 0; i < 13; i++) denominations_player[i] = 0;
+	for (i = 0; i < 13; i++) denominations_dealer[i] = 0;
+	for (i = 0; i < 4; i++) suits_player[i] = 0;
+	for (i = 0; i < 4; i++) suits_dealer[i] = 0;
 	init_deck(deck);
 	srand((unsigned)time(NULL)); /* seed random-number generator */
 
@@ -54,7 +62,8 @@ begin:
 	}
 	*/
 
-	printf("~~WELCOME TO POKER~~\n");
+	if (round == 1) printf("~~WELCOME TO POKER~~\n");
+	else printf("~~ROUND %d OF POKER~~\n", round);
 	display_menu();
 	display_hand(player_hand, suit, denomination);
 	//Allow player to choose which cards to discard
@@ -63,9 +72,19 @@ begin:
 	//Replace specified cards in player hand
 	redraw(discard_list, &player_hand, buffer1);
 	display_hand(player_hand, suit, denomination);
+	precheck_hand(player_hand, denominations_player, suits_player);
+	printf("Denominations: ");
+	for (i = 0; i < 13; i++) printf("%d ", denominations_player[i]);
+	printf("Suits: ");
+	for (i = 0; i < 4; i++) printf("%d ", suits_player[i]);
+	score_player = check_master(denominations_player, suits_player);
+	printf("You scored %d\n", score_player);
 
+
+	//GAME OVER~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	//Play again if desired
 	cont = cont_playing();
+	++round;
 	if (cont == 'y') goto begin;
 	else printf("See you next time!\n");
 

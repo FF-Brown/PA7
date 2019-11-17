@@ -71,6 +71,6 @@ int check_straight(int denominations[]);
 int check_three(int denominations[]);
 int check_twoPair(int denominations[]);
 int check_pair(int denominations[]);
-int check_master(int denominations[], int suits[]);
+short check_master(int denominations[], int suits[]);
 
 #endif // !POKER_H

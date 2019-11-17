@@ -267,14 +267,14 @@ void precheck_hand(Hand hand, int denominations[], int suits[])
 {
 	for (int i = 0; i < 5; i++)	{
 		denominations[hand.cards[i].denomination]++;
-		suits[hand.cards[i].suit];
+		suits[hand.cards[i].suit]++;
 	}
 }
 //denomination
 int check_four(int denominations[])
 {
 	int result = 0;
-	for (int i = 0; i < 14; i++) {
+	for (int i = 0; i < 13; i++) {
 		if (denominations[i] == 4)
 			result = 1;
 	}
@@ -285,7 +285,7 @@ int check_flush(int suits[])
 {
 	int result = 0;
 	for (int i = 0; i < 5; i++) {
-		if (suits[i])
+		if (suits[i] == 5)
 			result = 1;
 	}
 	return result;
@@ -294,7 +294,7 @@ int check_flush(int suits[])
 int check_straight(int denominations[])
 {
 	short result = 0;
-	for (int i = 0; i < 11; i++) {
+	for (int i = 0; i < 9; i++) {
 		if (denominations[i] == 1) {
 			for (int j = 0; j < 4; j++) {
 				if (denominations[j] == 1)
@@ -309,7 +309,7 @@ int check_straight(int denominations[])
 int check_three(int denominations[])
 {
 	int result = 0;
-	for (int i = 0; i < 14; i++) {
+	for (int i = 0; i < 13; i++) {
 		if (denominations[i] == 3)
 			result = 1;
 	}
@@ -318,7 +318,7 @@ int check_three(int denominations[])
 int check_twoPair(int denominations[])
 {
 	int result = 0;
-	for (int i = 0; i < 14; i++) {
+	for (int i = 0; i < 13; i++) {
 		if (denominations[i] >= 2)
 			result++;
 	}
@@ -329,13 +329,13 @@ int check_twoPair(int denominations[])
 int check_pair(int denominations[])
 {
 	int result = 0;
-	for (int i = 0; i < 14; i++) {
+	for (int i = 0; i < 13; i++) {
 		if (denominations[i] >= 2)
 			result = 1;
 	}
 	return result;
 }
-int check_master(int denominations[], int suits[])
+short check_master(int denominations[], int suits[])
 {
 	short score = 0;
 	if (check_four(denominations))
