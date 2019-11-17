@@ -295,11 +295,13 @@ int check_straight(int denominations[])
 {
 	short result = 0;
 	for (int i = 0; i < 9; i++) {
-		//if (denominations[i] > 1)
-			//return 0;
-		if (denominations[i] == 1) {
+		//Straight impossible if 2 cards of same value
+		if (denominations[i] > 1)
+			return 0;
+		//Whenever a 1 found, check next 4 denominations
+		else if (denominations[i] == 1) {
 			for (int j = i; j < i + 5; j++) {
-				if (denominations[j] == 1) //Convert to while loop
+				if (denominations[j] == 1)
 					++result;
 			}
 			if (result == 5) {
@@ -357,3 +359,88 @@ short check_master(int denominations[], int suits[])
 		score = PAIR;
 	return score;
 }
+short close2four(Hand hand, int denominations[], int discard_list[])
+{
+	short index = 0, i = 0, result = 0;
+	
+	for (i = 0; i < 13; i++) {
+		if (denominations[i] == 3) {
+			index = i; //Mark location of 3 cards
+			result = 1; //Report as found
+
+			//Assign discard list
+			for (i = 0; i < 5; i++) {
+				if (hand.cards[i].denomination == index)
+					discard_list[i] = 0;
+				else discard_list = 1;
+			}
+		}
+	}
+	return result;
+}
+short close2flush(Hand hand, int suits[], int discard_list[])
+{
+	short index = 0, i = 0, result = 0;
+	//Find which suit has at least 3 cards
+	for (i = 0; i < 5; i++) {
+		if (suits[i] >= 3) {
+			index = i;
+			result = 1;
+
+			//Assign discard_list
+			for (i = 0; i < 5; i++) {
+				if (hand.cards[i].suit == index)
+					discard_list[i] = 0;
+				else discard_list[i] = 1;
+			}
+		}
+	}
+	return result;
+}
+short close2straight(Hand hand, int denominations[], int discard_list[])
+{	
+	short i = 0, count = 0, j = 0, result = 0;
+	for (i = 0; i < 9; i++) {
+		//When 1 found...
+		if (denominations[i] == 1) {
+			//Check # of cards in the next 4 slots
+			for (j = i; j < i + 5; j++) {
+				if (denominations[j] == 1)
+					++count;
+			}
+			//If at least 3 total...
+			if (count >= 3) {
+				//Keep those 3 or 4 cards
+				for (short k = 0; k < 5; k++) {
+					if (hand.cards[k].denomination >= i && hand.cards[k].denomination <= i + 4)
+						discard_list[k] = 0;
+					else discard_list[k] = 1;
+				}
+				result = 1;
+			}
+			else count = 0;
+		}
+	}
+	return result;
+}
+short close2three(Hand hand, int denominations[], int discard_list[])
+{
+	short index = 0, i = 0, result = 0;
+	//Find the pair
+	for (i = 0; i < 13; i++) {
+		if (denominations[i] == 2) {
+			index = i;
+			result = 1;
+
+			//Assign discard_list
+			for (i = 0; i < 5; i++) {
+				if (hand.cards[i].denomination == index)
+					discard_list[i] = 0;
+				else discard_list = 1;
+			}
+		}
+	}
+	return result;
+}
+//UPDATE HEADER FILE
+void close_enough(Hand hand, int denominations[], int suits[], int discard_list[]);

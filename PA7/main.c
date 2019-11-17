@@ -45,6 +45,7 @@ begin:
 	init_deck(deck);
 	srand((unsigned)time(NULL)); /* seed random-number generator */
 
+	//Shuffle and deal cards
 	shuffle(deck);
 	deal(deck, denomination, suit, &player_hand, &dealer_hand, &buffer1, &buffer2);
 	/*Testing Purposes
@@ -75,11 +76,12 @@ begin:
 	//Sort hand into parallel arrays by denomination and suit
 	precheck_hand(player_hand, denominations_player, suits_player);
 	//Debug
+	/*
 	for (i = 4; i < 9; i++) denominations_player[i] = 1;
 	printf("Denominations: ");
 	for (i = 0; i < 13; i++) printf("%d ", denominations_player[i]);
 	printf("Suits: ");
-	for (i = 0; i < 4; i++) printf("%d ", suits_player[i]);
+	for (i = 0; i < 4; i++) printf("%d ", suits_player[i]);*/
 	//Score hand
 	score_player = check_master(denominations_player, suits_player);
 	//Report score

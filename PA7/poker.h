@@ -72,5 +72,10 @@ int check_three(int denominations[]);
 int check_twoPair(int denominations[]);
 int check_pair(int denominations[]);
 short check_master(int denominations[], int suits[]);
+void close2four(Hand hand, int denominations[], int discard_list[]);
+void close2flush(Hand hand, int suits[], int discard_list[]);
+void close2straight(Hand hand, int denominations[], int discard_list[]);
+void close2three(Hand hand, int denominations[], int discard_list[]);
+void close_enough(Hand hand, int denominations[], int suits[], int discard_list[]);
 
 #endif // !POKER_H
