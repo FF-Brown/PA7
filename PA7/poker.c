@@ -295,15 +295,20 @@ int check_straight(int denominations[])
 {
 	short result = 0;
 	for (int i = 0; i < 9; i++) {
+		//if (denominations[i] > 1)
+			//return 0;
 		if (denominations[i] == 1) {
-			for (int j = 0; j < 4; j++) {
-				if (denominations[j] == 1)
+			for (int j = i; j < i + 5; j++) {
+				if (denominations[j] == 1) //Convert to while loop
 					++result;
 			}
+			if (result == 5) {
+				result = 1;
+				return result;
+			}
+			else result = 0;
 		}
 	}
-	if (result == 4) result = 1;
-	else result = 0;
 	return result;
 }
 int check_three(int denominations[])

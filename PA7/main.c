@@ -72,12 +72,17 @@ begin:
 	//Replace specified cards in player hand
 	redraw(discard_list, &player_hand, buffer1);
 	display_hand(player_hand, suit, denomination);
+	//Sort hand into parallel arrays by denomination and suit
 	precheck_hand(player_hand, denominations_player, suits_player);
+	//Debug
+	for (i = 4; i < 9; i++) denominations_player[i] = 1;
 	printf("Denominations: ");
 	for (i = 0; i < 13; i++) printf("%d ", denominations_player[i]);
 	printf("Suits: ");
 	for (i = 0; i < 4; i++) printf("%d ", suits_player[i]);
+	//Score hand
 	score_player = check_master(denominations_player, suits_player);
+	//Report score
 	printf("You scored %d\n", score_player);
 
 
