@@ -209,6 +209,13 @@ short close2three(Hand hand, int denominations[], int discard_list[]);
 	Postconditions: Returns successful or not
 */
 short close_enough(Hand hand, int denominations[], int suits[], int discard_list[]);
+/*
+	Function: score_compare()
+	Date Created: 11/17/2019
+	Description: Compares the player and dealer's scores and prints result of round
+	Preconditions: Game over, both scores calculated
+	Postconditions: Result of round printed
+*/
 short score_compare(int player_score, int dealer_score, const char* winning_hands[]);
 
 #endif // !POKER_H
