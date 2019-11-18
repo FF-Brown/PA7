@@ -209,5 +209,6 @@ short close2three(Hand hand, int denominations[], int discard_list[]);
 	Postconditions: Returns successful or not
 */
 short close_enough(Hand hand, int denominations[], int suits[], int discard_list[]);
+short score_compare(int player_score, int dealer_score, const char* winning_hands[]);
 
 #endif // !POKER_H

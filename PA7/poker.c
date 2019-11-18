@@ -36,7 +36,7 @@ void display_menu(void)
 			break;
 			//Leave switch and while loop to begin playing game
 		case 2: //PLAY
-			//system("cls");
+			system("cls");
 			printf("Good luck!\n\n");
 			break;
 			//Exit program
@@ -208,22 +208,27 @@ void get_redraw(int discard_list[])
 	case 1:
 		printf("Indicate the cards you would like to discard by their order in your hand (i.e. 1, 3, 5, enter)\n");
 		scanf("%d", &card_numbers[0]);
+		system("cls");
 		break;
 	case 2:
 		printf("Indicate the cards you would like to discard by their order in your hand (i.e. 1, 3, 5, enter)\n");
 		scanf("%d%d", &card_numbers[0], &card_numbers[1]);
+		system("cls");
 		break;
 	case 3:
 		printf("Indicate the cards you would like to discard by their order in your hand (i.e. 1, 3, 5, enter)\n");
 		scanf("%d%d%d", &card_numbers[0], &card_numbers[1], &card_numbers[2]);
+		system("cls");
 		break;
 	case 4:
 		printf("Indicate the cards you would like to discard by their order in your hand (i.e. 1, 3, 5, enter)\n");
 		scanf("%d%d%d%d", &card_numbers[0], &card_numbers[1], &card_numbers[2], &card_numbers[3]);
+		system("cls");
 		break;
 	case 5:
 		printf("Indicate the cards you would like to discard by their order in your hand (i.e. 1, 3, 5, enter)\n");
 		scanf("%d%d%d%d%d", &card_numbers[0], &card_numbers[1], &card_numbers[2], &card_numbers[3], &card_numbers[4]);
+		system("cls");
 		break;
 	default:
 		break;
@@ -454,7 +459,7 @@ short close2four(Hand hand, int denominations[], int discard_list[])
 			for (i = 0; i < 5; i++) {
 				if (hand.cards[i].denomination == index)
 					discard_list[i] = 0;
-				else discard_list = 1;
+				else discard_list[i] = 1;
 			}
 		}
 	}
@@ -539,7 +544,7 @@ short close2three(Hand hand, int denominations[], int discard_list[])
 			for (i = 0; i < 5; i++) {
 				if (hand.cards[i].denomination == index)
 					discard_list[i] = 0;
-				else discard_list = 1;
+				else discard_list[i] = 1;
 			}
 		}
 	}
@@ -563,17 +568,32 @@ short close_enough(Hand hand, int denominations[], int suits[], int discard_list
 		result = 1;
 	}
 	//Otherwise run close2 functions
-	else if (close2four)
+	else if (close2four(hand, denominations, discard_list))
 		result = 1;
-	else if (close2flush)
+	else if (close2flush(hand, suits, discard_list))
 		result = 1;
-	else if (close2straight)
+	else if (close2straight(hand, denominations, discard_list))
 		result = 1;
-	else if (close2three)
+	else if (close2three(hand, denominations, discard_list))
 		result = 1;
 	else {
 		for (short i = 0; i < 5; i++) discard_list[i] = 1;
 		result = 0;
 	}
 	return result;
+}
+short score_compare(int player_score, int dealer_score, const char* winning_hands[])
+{
+	if (player_score > dealer_score) {
+		printf("You won! You had a %s and the dealer only had a %s.\n", winning_hands[player_score], winning_hands[dealer_score]);
+		return 1;
+	}
+	else if (player_score < dealer_score) {
+		printf("You lose! The dealer had a %s and you only had a %s. Maybe work on your bluff next time, eh?\n", winning_hands[dealer_score], winning_hands[player_score]);
+		return 0;
+	}
+	else {
+		printf("Tie! Both you and the dealer had a %s!\n", winning_hands[player_score]);
+		return -1;
+	}
 }

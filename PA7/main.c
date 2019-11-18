@@ -24,6 +24,7 @@ int main(void)
 	int suits_dealer[4] = { 0 };
 	short score_player = 0, score_dealer = 0;
 	short i = 0, round = 1;
+	const char* winning_hands[7] = {"Garbage hand", "Pair", "Two pair", "Three of a kind", "Straight", "Flush", "Four of a kind" };
 
 	/* initialize suit array */
 	const char* suit[4] = { "Hearts", "Diamonds", "Clubs", "Spades" };
@@ -63,39 +64,23 @@ begin:
 	}
 	*/
 
-	//DEALER DEBUGGING~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	for (i = 0; i < 12; i++) denominations_dealer[i] = 0;
-	denominations_dealer[5] = 4;
-	denominations_dealer[0] = 1;
-	printf("Denominations: ");
-	for (i = 0; i < 13; i++) printf("%d ", denominations_dealer[i]);
-	printf("Suits: ");
-	for (i = 0; i < 4; i++) printf("%d ", suits_dealer[i]);
-
-	display_hand(dealer_hand, suit, denomination); //Show dealer hand
-	system("pause");
-	precheck_hand(dealer_hand, denominations_dealer, suits_dealer);
-	close_enough(dealer_hand, denominations_dealer, suits_dealer, discard_list); //Have dealer assign discard_list
-	printf("Discard list: %d %d %d %d %d\n", discard_list[0], discard_list[1], discard_list[2], discard_list[3], discard_list[4]);
-	redraw(discard_list, &dealer_hand, buffer2);
-	display_hand(dealer_hand, suit, denomination);
-	precheck_hand(dealer_hand, denominations_dealer, suits_dealer);
-	score_dealer = check_master(denominations_dealer, suits_dealer);
-	printf("You scored %d\n", score_dealer);
-
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	if (round == 1) printf("~~WELCOME TO POKER~~\n");
 	else printf("~~ROUND %d OF POKER~~\n", round);
 	display_menu();
+	printf("Cards have been dealt. Dealer's hand is facedown.\n");
 	display_hand(player_hand, suit, denomination);
+
 	//Allow player to choose which cards to discard
 	get_redraw(discard_list);
-	printf("Discard list: %d %d %d %d %d\n", discard_list[0], discard_list[1], discard_list[2], discard_list[3], discard_list[4]);
+
 	//Replace specified cards in player hand
 	redraw(discard_list, &player_hand, buffer1);
 	display_hand(player_hand, suit, denomination);
+
 	//Sort hand into parallel arrays by denomination and suit
 	precheck_hand(player_hand, denominations_player, suits_player);
+
 	//Debug
 	/*
 	for (i = 4; i < 9; i++) denominations_player[i] = 1;
@@ -108,6 +93,21 @@ begin:
 	score_player = check_master(denominations_player, suits_player);
 	//Report score
 	printf("You scored %d\n", score_player);
+
+	//Fill parallel arrays
+	precheck_hand(dealer_hand, denominations_dealer, suits_dealer);
+	//Have dealer assign discard_list
+	close_enough(dealer_hand, denominations_dealer, suits_dealer, discard_list); 
+	redraw(discard_list, &dealer_hand, buffer2);
+	//Reset parallel arrays
+	for (i = 0; i < 12; i++) denominations_dealer[i] = 0;
+	for (i = 0; i < 4; i++) suits_dealer[i] = 0;
+	//Refill parallel arrays
+	precheck_hand(dealer_hand, denominations_dealer, suits_dealer);
+	//Calculate dealer score
+	score_dealer = check_master(denominations_dealer, suits_dealer);
+
+	score_compare(score_player, score_dealer, winning_hands);
 
 
 	//GAME OVER~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
