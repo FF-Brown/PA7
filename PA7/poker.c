@@ -60,7 +60,17 @@ void display_menu(void)
 */
 void rules(void)
 {
-	printf("Typical rules of five-card draw.\n");
+	printf("Five-card draw\n");
+	printf("This is one of the more simple versions of poker. As this text-based edition does not include\nbetting, we will exclude an explanation of that system from these rules.\n");
+	printf("At the beginning of the match, players (including the dealer) are dealt five cards from the deck.\nThey then have the option to discard as many cards as they want and draw that many again.\n");
+	printf("Once all players have been dealt new cards, their hands are scored. Possible hands include:\n");
+	printf("Four-of-a-kind: Four cards of the same denomination (i.e. jacks, queens, threes, etc.\n");
+	printf("Flush: All cards of the same suit (i.e. hearts)\n");
+	printf("Straight: Five denominations in a row (i.e. 3, 4, 5, 6, 7)\n");
+	printf("Three-of-a-kind: Three cards of the same denomination\n");
+	printf("Two pair: Two pairs of denominations (i.e. 2 fours, 2 queens)\n");
+	printf("Pair: Two of the same denomination\n");
+	printf("The hands above are listed in order or desirability. Whoever has the better hand wins.\n");
 }
 /*
 shuffle cards in deck (starting code)
