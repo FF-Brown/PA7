@@ -167,6 +167,13 @@ void init_hand(Hand* hand)
 	}
 
 }
+/*
+	Function: display_hand()
+	Date Created: 
+	Description: Prints the player's current hand to the screen
+	Preconditions: Cards have been dealt
+	Postconditions: Hand printed to screen
+*/
 void display_hand(Hand hand, const char* wSuit[], const char* wDenomination[])
 {
 	printf("Your current hand: \n");
@@ -174,10 +181,20 @@ void display_hand(Hand hand, const char* wSuit[], const char* wDenomination[])
 		printf("%d.) %s of %s\n", i + 1, wDenomination[hand.cards[i].denomination], wSuit[hand.cards[i].suit]);
 	}
 }
+/*
+	Function: get_redraw()
+	Date Created: 
+	Description: Asks user which cards they want to discard. Creates an array of input. Translates that array into discard_list[]
+	Preconditions: Player hand has been displayed. 
+	Postconditions: discard_list[] filled
+*/
 void get_redraw(int discard_list[])
 {
 	int card_numbers[5] = { 0 };
 	int discard = 0;
+	//init discard_list
+	//for (short i = 0; i < 5; i++) discard_list[i] = 0;
+
 	do{
 		printf("How many cards would you like to discard? Next you will choose *which* cards to discard.\n");
 		scanf("%d", &discard);
@@ -190,37 +207,28 @@ void get_redraw(int discard_list[])
 		break;
 	case 1:
 		printf("Indicate the cards you would like to discard by their order in your hand (i.e. 1, 3, 5, enter)\n");
-		//for (int i = 0; i < discard; i++)
-		//	scanf("%d", &card_numbers[i]);
 		scanf("%d", &card_numbers[0]);
 		break;
 	case 2:
 		printf("Indicate the cards you would like to discard by their order in your hand (i.e. 1, 3, 5, enter)\n");
-		//for (int i = 0; i < discard; i++)
-		//	scanf("%d", &card_numbers[i]);
 		scanf("%d%d", &card_numbers[0], &card_numbers[1]);
 		break;
 	case 3:
 		printf("Indicate the cards you would like to discard by their order in your hand (i.e. 1, 3, 5, enter)\n");
-		//for (int i = 0; i < discard; i++)
-		//	scanf("%d", &card_numbers[i]);
 		scanf("%d%d%d", &card_numbers[0], &card_numbers[1], &card_numbers[2]);
 		break;
 	case 4:
 		printf("Indicate the cards you would like to discard by their order in your hand (i.e. 1, 3, 5, enter)\n");
-		//for (int i = 0; i < discard; i++)
-		//	scanf("%d", &card_numbers[i]);
 		scanf("%d%d%d%d", &card_numbers[0], &card_numbers[1], &card_numbers[2], &card_numbers[3]);
 		break;
 	case 5:
 		printf("Indicate the cards you would like to discard by their order in your hand (i.e. 1, 3, 5, enter)\n");
-		//for (int i = 0; i < discard; i++)
-		//	scanf("%d", &card_numbers[i]);
 		scanf("%d%d%d%d%d", &card_numbers[0], &card_numbers[1], &card_numbers[2], &card_numbers[3], &card_numbers[4]);
 		break;
 	default:
 		break;
 	}
+	//Assign discard_list according to input values
 	for (int check = 1; check <= 5; check++) {
 		for (int i = 0; i < 5; i++) {
 			if (card_numbers[i] == check)
@@ -228,6 +236,13 @@ void get_redraw(int discard_list[])
 		}
 	}
 }
+/*
+	Function: redraw()
+	Date Created:
+	Description: Uses discard_list[] to take cards from the buffer hand and put them into the player's hand
+	Preconditions: Player has chosen which cards to discard
+	Postconditions: Player has new cards in their hand
+*/
 void redraw(int discard_list[], Hand* hand, Hand buffer)
 {
 	for (int i = 0; i < 5; i++) {
@@ -241,7 +256,7 @@ void redraw(int discard_list[], Hand* hand, Hand buffer)
 	Function: cont_playing()
 	Date Created:
 	Description: Gives player the option to play again. New and improved version with a do-while loop (as it should be)
-	Preconditions: Game over, all results displayed
+	Preconditions: Game over
 	Postconditions: Returns player decision
 */
 char cont_playing(void)
@@ -255,6 +270,13 @@ char cont_playing(void)
 	} while (cont != 'y' && cont != 'n');
 	return cont;
 }
+/*
+	Function: init_deck()
+	Date Created:
+	Description: Resets deck for a new round
+	Preconditions: Beginning of round
+	Postconditions: Deck reset to 0's
+*/
 void init_deck(int deck[][13])
 {
 	for (int rows = 0; rows < 4; rows++) {
@@ -263,6 +285,13 @@ void init_deck(int deck[][13])
 		}
 	}
 }
+/*
+	Function: precheck_hand()
+	Date Created:
+	Description: Sorts cards from hand into counting arrays by denomination and suit for scoring
+	Preconditions: Ready to score
+	Postconditions: denominations[] and suits[] arrays formed
+*/
 void precheck_hand(Hand hand, int denominations[], int suits[])
 {
 	for (int i = 0; i < 5; i++)	{
@@ -270,7 +299,13 @@ void precheck_hand(Hand hand, int denominations[], int suits[])
 		suits[hand.cards[i].suit]++;
 	}
 }
-//denomination
+/*
+	Function: check_four()
+	Date Created:
+	Description: Checks to see if player has a four-of-a-kind, returns 1/0 (T/F)
+	Preconditions: Player has drawn any new cards and precheck_hand() has run
+	Postconditions: Outcome returned
+*/
 int check_four(int denominations[])
 {
 	int result = 0;
@@ -280,7 +315,13 @@ int check_four(int denominations[])
 	}
 	return result;
 }
-//same suit
+/*
+	Function: check_flush()
+	Date Created:
+	Description: Checks if player has a flush
+	Preconditions: precheck_hand() has run
+	Postconditions: Result (1/0) returned
+*/
 int check_flush(int suits[])
 {
 	int result = 0;
@@ -290,7 +331,13 @@ int check_flush(int suits[])
 	}
 	return result;
 }
-//consecutive
+/*
+	Function: check_straight()
+	Date Created:
+	Description: Checks if player has a straight
+	Preconditions: precheck_hand() has run
+	Postconditions: Returns 1/0
+*/
 int check_straight(int denominations[])
 {
 	short result = 0;
@@ -313,6 +360,13 @@ int check_straight(int denominations[])
 	}
 	return result;
 }
+/*
+	Function: check_three()
+	Date Created:
+	Description: Checks if player has a three-of-a-kind
+	Preconditions: precheck_hand() has run
+	Postconditions: Returns 1/0
+*/
 int check_three(int denominations[])
 {
 	int result = 0;
@@ -322,6 +376,13 @@ int check_three(int denominations[])
 	}
 	return result;
 }
+/*
+	Function: check_twoPair()
+	Date Created:
+	Description: Checks if player has two pairs
+	Preconditions: precheck_hand() has run
+	Postconditions: Returns 1/0
+*/
 int check_twoPair(int denominations[])
 {
 	int result = 0;
@@ -333,6 +394,13 @@ int check_twoPair(int denominations[])
 	else result = 0;
 	return result;
 }
+/*
+	Function: check_pair()
+	Date Created:
+	Description: Checks if the player has a pair
+	Preconditions: precheck_hand() has run 
+	Postconditions: Returns 1/0
+*/
 int check_pair(int denominations[])
 {
 	int result = 0;
@@ -342,6 +410,13 @@ int check_pair(int denominations[])
 	}
 	return result;
 }
+/*
+	Function: check_master()
+	Date Created:
+	Description: Runs all other score checking functions in order. Breaks when one is true.
+	Preconditions: precheck_hand() has run
+	Postconditions: Returns score
+*/
 short check_master(int denominations[], int suits[])
 {
 	short score = 0;
@@ -359,6 +434,13 @@ short check_master(int denominations[], int suits[])
 		score = PAIR;
 	return score;
 }
+/*
+	Function: close2four()
+	Date Created: 11/17/2019
+	Description: Checks to see if player has 3 of a kind. Assigns discard_list[] if so
+	Preconditions: precheck_hand() run
+	Postconditions: Returns 1/0
+*/
 short close2four(Hand hand, int denominations[], int discard_list[])
 {
 	short index = 0, i = 0, result = 0;
@@ -378,6 +460,13 @@ short close2four(Hand hand, int denominations[], int discard_list[])
 	}
 	return result;
 }
+/*
+	Function: close2flush()
+	Date Created: 11/17/2019
+	Description: Checks to see if player is close to having a flush. Assigns discard_list[] if so
+	Preconditions: precheck_hand() run
+	Postconditions: Returns 1/0
+*/
 short close2flush(Hand hand, int suits[], int discard_list[])
 {
 	short index = 0, i = 0, result = 0;
@@ -397,6 +486,13 @@ short close2flush(Hand hand, int suits[], int discard_list[])
 	}
 	return result;
 }
+/*
+	Function: close2straight()
+	Date Created: 11/17/2019
+	Description: Checks to see if player nearly has a straight. Assigns discard_list[] if so.
+	Preconditions: precheck_hand() run
+	Postconditions: Returns 1/0
+*/
 short close2straight(Hand hand, int denominations[], int discard_list[])
 {	
 	short i = 0, count = 0, j = 0, result = 0;
@@ -423,6 +519,13 @@ short close2straight(Hand hand, int denominations[], int discard_list[])
 	}
 	return result;
 }
+/*
+	Function: close2three()
+	Date Created: 11/17/2019
+	Description: Checks to see if player nearly has a three of a kind. Assigns discard_list[] if so.
+	Preconditions: precheck_hand() run
+	Postconditions: Returns 1/0
+*/
 short close2three(Hand hand, int denominations[], int discard_list[])
 {
 	short index = 0, i = 0, result = 0;
@@ -442,5 +545,35 @@ short close2three(Hand hand, int denominations[], int discard_list[])
 	}
 	return result;
 }
-//UPDATE HEADER FILE
-void close_enough(Hand hand, int denominations[], int suits[], int discard_list[]);
+/*
+	Function: close_enough()
+	Date Created: 11/17/2019
+	Description: Runs all close2 functions. 
+	Preconditions: precheck_hand() run
+	Postconditions: Returns successful or not
+*/
+short close_enough(Hand hand, int denominations[], int suits[], int discard_list[])
+{
+	short result = 0, score = 0;
+	//run check_master
+	score = check_master(denominations, suits);
+	//if score >= 4, fantastic. No discards
+	if (score >= 4) {
+		for (short i = 0; i < 5; i++) discard_list[i] = 0;
+		result = 1;
+	}
+	//Otherwise run close2 functions
+	else if (close2four)
+		result = 1;
+	else if (close2flush)
+		result = 1;
+	else if (close2straight)
+		result = 1;
+	else if (close2three)
+		result = 1;
+	else {
+		for (short i = 0; i < 5; i++) discard_list[i] = 1;
+		result = 0;
+	}
+	return result;
+}

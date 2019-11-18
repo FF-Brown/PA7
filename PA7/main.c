@@ -63,6 +63,27 @@ begin:
 	}
 	*/
 
+	//DEALER DEBUGGING~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	for (i = 0; i < 12; i++) denominations_dealer[i] = 0;
+	denominations_dealer[5] = 4;
+	denominations_dealer[0] = 1;
+	printf("Denominations: ");
+	for (i = 0; i < 13; i++) printf("%d ", denominations_dealer[i]);
+	printf("Suits: ");
+	for (i = 0; i < 4; i++) printf("%d ", suits_dealer[i]);
+
+	display_hand(dealer_hand, suit, denomination); //Show dealer hand
+	system("pause");
+	precheck_hand(dealer_hand, denominations_dealer, suits_dealer);
+	close_enough(dealer_hand, denominations_dealer, suits_dealer, discard_list); //Have dealer assign discard_list
+	printf("Discard list: %d %d %d %d %d\n", discard_list[0], discard_list[1], discard_list[2], discard_list[3], discard_list[4]);
+	redraw(discard_list, &dealer_hand, buffer2);
+	display_hand(dealer_hand, suit, denomination);
+	precheck_hand(dealer_hand, denominations_dealer, suits_dealer);
+	score_dealer = check_master(denominations_dealer, suits_dealer);
+	printf("You scored %d\n", score_dealer);
+
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	if (round == 1) printf("~~WELCOME TO POKER~~\n");
 	else printf("~~ROUND %d OF POKER~~\n", round);
 	display_menu();
@@ -81,7 +102,8 @@ begin:
 	printf("Denominations: ");
 	for (i = 0; i < 13; i++) printf("%d ", denominations_player[i]);
 	printf("Suits: ");
-	for (i = 0; i < 4; i++) printf("%d ", suits_player[i]);*/
+	for (i = 0; i < 4; i++) printf("%d ", suits_player[i]);
+	*/
 	//Score hand
 	score_player = check_master(denominations_player, suits_player);
 	//Report score
