@@ -49,20 +49,6 @@ begin:
 	//Shuffle and deal cards
 	shuffle(deck);
 	deal(deck, denomination, suit, &player_hand, &dealer_hand, &buffer1, &buffer2);
-	/*Testing Purposes
-	for (int i = 0; i < 5; i++) {
-		printf("%s of %s\n", denomination[player_hand.cards[i].denomination], suit[player_hand.cards[i].suit]);
-	}
-	for (int i = 0; i < 5; i++) {
-		printf("%s of %s\n", denomination[dealer_hand.cards[i].denomination], suit[dealer_hand.cards[i].suit]);
-	}
-	for (int i = 0; i < 5; i++) {
-		printf("%s of %s\n", denomination[buffer1.cards[i].denomination], suit[buffer1.cards[i].suit]);
-	}
-	for (int i = 0; i < 5; i++) {
-		printf("%s of %s\n", denomination[buffer2.cards[i].denomination], suit[buffer2.cards[i].suit]);
-	}
-	*/
 
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	if (round == 1) printf("~~WELCOME TO POKER~~\n");
@@ -81,14 +67,6 @@ begin:
 	//Sort hand into parallel arrays by denomination and suit
 	precheck_hand(player_hand, denominations_player, suits_player);
 
-	//Debug
-	/*
-	for (i = 4; i < 9; i++) denominations_player[i] = 1;
-	printf("Denominations: ");
-	for (i = 0; i < 13; i++) printf("%d ", denominations_player[i]);
-	printf("Suits: ");
-	for (i = 0; i < 4; i++) printf("%d ", suits_player[i]);
-	*/
 	//Score hand
 	score_player = check_master(denominations_player, suits_player);
 	//Report score
